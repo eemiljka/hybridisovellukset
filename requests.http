@@ -20,9 +20,4 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo1LCJsZ
 ### GET /api/v1/media
 GET http://localhost:3000/api/v1/media
 
-
-### POST /api/v1/upload
-POST http://localhost:3002/api/v1/upload
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo1LCJsZXZlbF9uYW1lIjoiVXNlciIsImlhdCI6MTcwNTU3NzQ4N30.ZNPTGyA_aDqQbIhNSvpN63Xkm_k_PrS6rephBYlACC8
-Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
-file: cat099.jpg
+### LOPUT POSTMANISSA
