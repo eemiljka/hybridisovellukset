@@ -1,4 +1,4 @@
-import {fetchAllMedia, fetchMediaById} from '../models/mediaModel';
+import {fetchAllMedia, fetchMediaById, fetchMediaByTag} from '../models/mediaModel';
 
 export default {
   Query: {
@@ -9,6 +9,9 @@ export default {
       console.log(args);
       const id = Number(args.media_id);
       return await fetchMediaById(id);
+    },
+    mediaItemsByTag: async (_parent: undefined, args: {tag: string}) => {
+      return await fetchMediaByTag(args.tag);
     },
   },
 };
