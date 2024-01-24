@@ -1,4 +1,6 @@
-import {fetchAllMedia, fetchMediaById, fetchMediaByTag} from '../models/mediaModel';
+import { MediaItem } from '@sharedTypes/DBTypes';
+import {fetchAllMedia, fetchMediaById, fetchMediaByTag, postMedia, postTagToMedia} from '../models/mediaModel';
+import { postTag } from '../models/tagModel';
 
 export default {
   Query: {
@@ -12,6 +14,23 @@ export default {
     },
     mediaItemsByTag: async (_parent: undefined, args: {tag: string}) => {
       return await fetchMediaByTag(args.tag);
+    },
+  },
+  Mutation: {
+    createMediaItem: async (
+      _parent: undefined,
+      args: {input: Omit<MediaItem, 'media_id' | 'created_at' | 'thumbnail'>},
+    ) => {
+      return await postMedia(args.input);
+    },
+    AddTagToMediaItem: async (
+      _parent: undefined,
+      args: {input: {media_id: string; tag_name: string}},
+    ) => {
+      return await postTagToMedia(
+        args.input.tag_name,
+        Number(args.input.media_id),
+      );
     },
   },
 };
