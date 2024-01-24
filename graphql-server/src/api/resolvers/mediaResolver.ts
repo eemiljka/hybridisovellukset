@@ -1,6 +1,11 @@
-import { MediaItem } from '@sharedTypes/DBTypes';
-import {fetchAllMedia, fetchMediaById, fetchMediaByTag, postMedia, postTagToMedia} from '../models/mediaModel';
-import { postTag } from '../models/tagModel';
+import {MediaItem} from '@sharedTypes/DBTypes';
+import {
+  fetchAllMedia,
+  fetchMediaById,
+  fetchMediaByTag,
+  postMedia,
+  postTagToMedia,
+} from '../models/mediaModel';
 
 export default {
   Query: {
@@ -23,14 +28,13 @@ export default {
     ) => {
       return await postMedia(args.input);
     },
-    AddTagToMediaItem: async (
+    addTagToMediaItem: async (
       _parent: undefined,
       args: {input: {media_id: string; tag_name: string}},
     ) => {
-      return await postTagToMedia(
-        args.input.tag_name,
-        Number(args.input.media_id),
-      );
+      const media_id = Number(args.input.media_id);
+      console.log(args, media_id);
+      return await postTagToMedia(args.input.tag_name, media_id);
     },
   },
 };
