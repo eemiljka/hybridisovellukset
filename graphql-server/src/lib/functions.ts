@@ -2,7 +2,7 @@ import {ErrorResponse} from '@sharedTypes/MessageTypes';
 
 const fetchData = async <T>(
   url: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
 ): Promise<T> => {
   console.log('fetching data');
   const response = await fetch(url, options);
