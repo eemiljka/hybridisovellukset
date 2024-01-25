@@ -11,6 +11,11 @@ type MediaItem {
   tags: [Tag]
 }
 
+type MediaResponse {
+  message: String!
+  ...
+}
+
 type Query {
   mediaItems: [MediaItem]
   mediaItem(media_id: ID!): MediaItem
