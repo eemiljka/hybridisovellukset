@@ -6,18 +6,22 @@ type User {
   created_at: String!
 }
 
+type UserResponse {
+  user: User!
+  message: String!
+}
+
 type Query {
   users: [User]
   user(user_id: ID!): User
 }
 
+input UserInput {
+  username: String!
+  email: String!
+  password: String!
+}
+
 type Mutation {
-  createUser(username: String!, email: String!, password: String!): User
-  updateUser(
-    user_id: ID!
-    username: String
-    email: String
-    password: String
-  ): User
-  deleteUser(user_id: ID!): User
+  createUser(input: UserInput!): UserResponse
 }

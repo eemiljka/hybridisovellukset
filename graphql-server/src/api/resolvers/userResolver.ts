@@ -1,51 +1,37 @@
-import { User } from '@sharedTypes/DBTypes';
-import { fetchData } from '../../lib/functions';
+import {User, UserWithNoPassword} from '@sharedTypes/DBTypes';
+import {fetchData} from '../../lib/functions';
+import {UserResponse} from '@sharedTypes/MessageTypes';
 
 export default {
   Query: {
     users: async () => {
-      return await fetchData<User[]>('http://localhost:3001/api/v1/users');
+      const users = await fetchData<UserWithNoPassword[]>(
+        process.env.AUTH_SERVER + '/users',
+      );
+      return users;
     },
-    user: async (_parent: undefined, args: { user_id: string }) => {
-      const id = Number(args.user_id);
-      return await fetchData<User>(`http://localhost:3001/api/v1/users/${id}`);
+    user: async (_parent: undefined, args: {user_id: string}) => {
+      const user = await fetchData<UserWithNoPassword>(
+        process.env.AUTH_SERVER + '/users/' + args.user_id,
+      );
+      return user;
     },
   },
   Mutation: {
     createUser: async (
       _parent: undefined,
-      args: { input: Omit<User, 'user_id'> },
+      args: {input: Pick<User, 'username' | 'email' | 'password'>},
     ) => {
-      return await fetchData<User>('http://localhost:3001/api/v1/users', {
+      const options: RequestInit = {
         method: 'POST',
         body: JSON.stringify(args.input),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-    },
-    updateUser: async (
-      _parent: undefined,
-      args: {
-        input: Pick<User, 'username' | 'password'>;
-        user_id: string;
-      },
-    ) => {
-      const id = Number(args.user_id);
-      return await fetchData<User>(`http://localhost:3001/api/v1/users/${id}`, {
-        method: 'PUT',
-        body: JSON.stringify(args.input),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-    },
-    deleteUser: async (_parent: undefined, args: { user_id: string }) => {
-      const id = Number(args.user_id);
-      return await fetchData<User>(`http://localhost:3001/api/v1/users/${id}`, {
-        method: 'DELETE',
-      });
+        headers: {'Content-Type': 'application/json'},
+      };
+      const user = await fetchData<UserResponse>(
+        process.env.AUTH_SERVER + '/users',
+        options,
+      );
+      return user;
     },
   },
 };
-

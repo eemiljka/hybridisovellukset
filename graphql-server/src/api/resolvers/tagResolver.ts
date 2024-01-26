@@ -1,7 +1,18 @@
 import {Tag} from '@sharedTypes/DBTypes';
-import {fetchAllTags, postTag, deleteTag} from '../models/tagModel';
+import {
+  deleteTag,
+  fetchAllTags,
+  fetchTagsByMediaId,
+  postTag,
+} from '../models/tagModel';
 
 export default {
+  MediaItem: {
+    tags: async (parent: {media_id: string}) => {
+      console.log(parent);
+      return await fetchTagsByMediaId(Number(parent.media_id));
+    },
+  },
   Query: {
     tags: async () => {
       return await fetchAllTags();
@@ -15,9 +26,7 @@ export default {
       return await postTag(args.input);
     },
     deleteTag: async (_parent: undefined, args: {input: string}) => {
-      const tag_id = Number(args.input);
-      console.log(tag_id, args);
-      return await deleteTag(tag_id);
+      return await deleteTag(Number(args.input));
     },
   },
 };
