@@ -33,5 +33,16 @@ export default {
       );
       return user;
     },
+    login: async (_parent: undefined, args: Pick<User, 'username' | 'password'>) => {
+      const options = {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(args),
+      };
+      const user = await fetchData<UserWithNoPassword>(
+          process.env.AUTH_SERVER + '/auth/login', options
+          );
+      return user;
+  },
   },
 };
