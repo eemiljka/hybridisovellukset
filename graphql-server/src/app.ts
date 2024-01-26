@@ -36,14 +36,15 @@ const app = express();
     });
 
     // create executable schema for validation
-const schema = makeExecutableSchema({
-  typeDefs: [constraintDirectiveTypeDefs, typeDefs],
-  resolvers,
-});
+    const schema = makeExecutableSchema({
+      typeDefs: [constraintDirectiveTypeDefs, typeDefs],
+      resolvers,
+    });
 
     const server = new ApolloServer<MyContext>({
       schema,
-      plugins: [createApollo4QueryValidationPlugin({schema}),
+      plugins: [
+        createApollo4QueryValidationPlugin({schema}),
         process.env.NODE_ENV === 'production'
           ? ApolloServerPluginLandingPageProductionDefault()
           : ApolloServerPluginLandingPageLocalDefault(),
@@ -54,11 +55,11 @@ const schema = makeExecutableSchema({
 
     app.use(
       '/graphql',
-      cors<cors.CorsRequest>(),
+      cors(),
       express.json(),
       expressMiddleware(server, {
         context: ({req}) => authenticate(req),
-      })
+      }),
     );
 
     app.use(notFound);

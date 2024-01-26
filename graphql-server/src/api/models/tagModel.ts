@@ -29,7 +29,9 @@ const postTag = async (tag: Omit<Tag, 'tag_id'>): Promise<Tag | null> => {
     const [result] = await promisePool.execute<RowDataPacket[]>(sql);
     if (result.length > 0) {
       return null;
+      // throw new Error('Tag already exists');
     }
+
     const [tagResult] = await promisePool.execute<ResultSetHeader>(
       'INSERT INTO Tags (tag_name) VALUES (?)',
       [tag.tag_name],
@@ -37,12 +39,14 @@ const postTag = async (tag: Omit<Tag, 'tag_id'>): Promise<Tag | null> => {
     if (tagResult.affectedRows === 0) {
       return null;
     }
-    const sql2 = promisePool.format('SELECT * FROM Tags WHERE tag_name = ?', [
-      tag.tag_name,
+
+    const sql2 = promisePool.format('SELECT * FROM Tags WHERE tag_id = ?', [
+      tagResult.insertId,
     ]);
     const [selectResult] = await promisePool.execute<RowDataPacket[] & Tag[]>(
       sql2,
     );
+
     if (selectResult.length > 0) {
       return selectResult[0];
     }

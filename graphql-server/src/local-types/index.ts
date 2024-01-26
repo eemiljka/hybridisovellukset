@@ -1,4 +1,3 @@
-import { MyContext } from '.api/schemas/index';
 import {TokenContent} from '@sharedTypes/DBTypes';
 
 type UserFromToken = TokenContent & {

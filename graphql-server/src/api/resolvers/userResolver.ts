@@ -1,8 +1,16 @@
 import {User, UserWithNoPassword} from '@sharedTypes/DBTypes';
 import {fetchData} from '../../lib/functions';
-import {UserResponse} from '@sharedTypes/MessageTypes';
+import {LoginResponse, UserResponse} from '@sharedTypes/MessageTypes';
 
 export default {
+  MediaItem: {
+    owner: async (parent: {user_id: string}) => {
+      const user = await fetchData<UserWithNoPassword>(
+        process.env.AUTH_SERVER + '/users/' + parent.user_id,
+      );
+      return user;
+    },
+  },
   Query: {
     users: async () => {
       const users = await fetchData<UserWithNoPassword[]>(
@@ -33,16 +41,20 @@ export default {
       );
       return user;
     },
-    login: async (_parent: undefined, args: Pick<User, 'username' | 'password'>) => {
+    login: async (
+      _parent: undefined,
+      args: Pick<User, 'username' | 'password'>,
+    ) => {
       const options = {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(args),
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(args),
       };
-      const user = await fetchData<UserWithNoPassword>(
-          process.env.AUTH_SERVER + '/auth/login', options
-          );
-      return user;
-  },
+      const loginResponse = await fetchData<LoginResponse>(
+        process.env.AUTH_SERVER + '/auth/login',
+        options,
+      );
+      return loginResponse;
+    },
   },
 };
